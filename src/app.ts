@@ -1,13 +1,35 @@
-function Logger(target: any, propertyName: string) {
-	console.log('Logger');
+// target: Prototype
+function Log1(target: any, propertyName: string) {
+	console.log('Property decorator');
 	console.log('target: ', target);
 	console.log('propertyName: ', propertyName);
 }
 
+function Log2(target: any, methodName: string, descriptor: PropertyDescriptor) {
+	console.log('Accessor decorator: ');
+	console.log(target);
+	console.log(methodName);
+	console.log(descriptor);
+}
+
+function Log3(target: any, methodName: string, descriptor: PropertyDescriptor) {
+	console.log('Method decorator: ');
+	console.log(target);
+	console.log(methodName);
+	console.log(descriptor);
+}
+
+function Log4(target: any, methodName: string, position: number) {
+	console.log('Parameter decorator: ');
+	console.log(target);
+	console.log(methodName);
+	console.log(position); // index of parameter
+}
+
 class Product {
-	@Logger
+	@Log1
 	public title: string;
-	@Logger
+	@Log1
 	private price: number;
 
 	constructor(title: string, price: number) {
@@ -16,11 +38,20 @@ class Product {
 		this.price = price;
 	}
 
-	getPrice() {
+	// accessor
+	@Log2
+	get getPrice() {
 		return this.price;
 	}
 
-	setPrice(price: number) {
+	// accessor
+	set setPrice(price: number) {
 		this.price = price;
+	}
+
+	// method
+	@Log3
+	getPriceWithTax(@Log4 tax: number) {
+		return this.price * tax;
 	}
 }
