@@ -1,25 +1,26 @@
-function Logger(_: Function) {
-	console.log('Logger decorator');
+function Logger(target: any, propertyName: string) {
+	console.log('Logger');
+	console.log('target: ', target);
+	console.log('propertyName: ', propertyName);
 }
 
-function RenderHeading(elemId: string, text: string) {
-	return function (target: any) {
-		console.log('RenderHeading decorator');
-		const elem = document.getElementById(elemId);
-		if (elem) {
-			const person = new target();
-			elem.innerHTML = `<h1>${text} ${person.name}</h1>`;
-		}
-	};
-}
+class Product {
+	@Logger
+	public title: string;
+	@Logger
+	private price: number;
 
-// Decorators runs bottom to top
-@Logger
-@RenderHeading('test', 'Hello Mr. ')
-class Person {
-	name = 'Hasibullah';
+	constructor(title: string, price: number) {
+		console.log('Constructor: ');
+		this.title = title;
+		this.price = price;
+	}
 
-	constructor() {
-		console.log('CONSTRUCTOR: creating an instance');
+	getPrice() {
+		return this.price;
+	}
+
+	setPrice(price: number) {
+		this.price = price;
 	}
 }
