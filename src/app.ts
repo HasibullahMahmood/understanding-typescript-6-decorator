@@ -1,13 +1,14 @@
-// Decorator factories(able to pass parameter)
-
-function Logger(message: String) {
-	return function (target: Function) {
-		console.log('target(constructor): ', target);
-		console.log('message: ', message);
+function RenderHeading(elemId: string, text: string) {
+	return function (target: any) {
+		const elem = document.getElementById(elemId);
+		if (elem) {
+			const person = new target();
+			elem.innerHTML = `<h1>${text} ${person.name}</h1>`;
+		}
 	};
 }
 
-@Logger('Called from person')
+@RenderHeading('test', 'Hello Mr. ')
 class Person {
 	name = 'Hasibullah';
 
@@ -15,6 +16,3 @@ class Person {
 		console.log('CONSTRUCTOR: creating an instance');
 	}
 }
-
-const person = new Person();
-console.log(person);
