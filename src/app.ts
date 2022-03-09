@@ -1,13 +1,16 @@
-// this function is called when js reads file for the first time
-// Even without initialization Class decorator is being called First
-function Logger(target: Function) {
-	console.log('Logging...');
-	console.log('target (constructor): ', target);
+// Decorator factories(able to pass parameter)
+
+function Logger(message: String) {
+	return function (target: Function) {
+		console.log('target(constructor): ', target);
+		console.log('message: ', message);
+	};
 }
 
-@Logger
+@Logger('Called from person')
 class Person {
 	name = 'Hasibullah';
+
 	constructor() {
 		console.log('CONSTRUCTOR: creating an instance');
 	}
