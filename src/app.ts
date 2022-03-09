@@ -1,5 +1,10 @@
+function Logger(_: Function) {
+	console.log('Logger decorator');
+}
+
 function RenderHeading(elemId: string, text: string) {
 	return function (target: any) {
+		console.log('RenderHeading decorator');
 		const elem = document.getElementById(elemId);
 		if (elem) {
 			const person = new target();
@@ -8,6 +13,8 @@ function RenderHeading(elemId: string, text: string) {
 	};
 }
 
+// Decorators runs bottom to top
+@Logger
 @RenderHeading('test', 'Hello Mr. ')
 class Person {
 	name = 'Hasibullah';
