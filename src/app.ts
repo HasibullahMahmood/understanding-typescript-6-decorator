@@ -1,24 +1,25 @@
-function WithTemplate(htmlContent: string, elemId: string) {
-	return function <T extends { new (...args: any[]): { name: string } }>(target: T) {
-		return class extends target {
-			constructor(...args: any[]) {
-				super(...args);
-				const elem = document.getElementById(elemId)!;
-				elem.innerHTML = htmlContent;
-				elem.querySelector('h1')!.innerText += ' '+ this.name;
-			}
-		};
+function AutoBind(_: any, _2: string, descriptor: PropertyDescriptor) {
+	const originalMethod = descriptor.value;
+	const adjDescriptor: PropertyDescriptor = {
+		configurable: true,
+		enumerable: false,
+		get() {
+			return originalMethod.bind(this);
+		},
 	};
+	return adjDescriptor;
 }
 
-@WithTemplate('<h1>Hello </h1>', 'test')
-class Person {
-	name: string;
-	constructor(name: string) {
-		console.log('Constructor', name);
-		this.name = name;
+class Printer {
+	message = 'This works!';
+
+	@AutoBind
+	printMessage() {
+		console.log(this.message);
 	}
 }
 
-const person = new Person('Hasibullah');
-console.log(person);
+const printer = new Printer();
+
+const button = document.querySelector('button')!;
+button.addEventListener('click', printer.printMessage);
